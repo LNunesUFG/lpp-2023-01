@@ -1,0 +1,71 @@
+body {
+    background-color: white;
+    color: black;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  #titulo {
+    color: blue;
+  }
+  
+  #tarefa {
+    width: 200px;
+    padding: 10px;
+    margin: 0 auto;
+    display: block;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  #listaTarefas {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #listaTarefas li {
+    margin-bottom: 10px;
+    border: 2px solid blue;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+  }
+  
+  .addBtn {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  
+  .clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .container {
+    text-align: center;
+  }
+  
+  .todo-input {
+    display: inline-block;
+  }
+  
+  .todo-list {
+    margin-top: 20px;
+  }
+  
+  .todo-item {
+    margin-bottom: 10px;
+  }
+  
