@@ -1,71 +1,45 @@
-body {
-    background-color: white;
-    color: black;
-  }
-  
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  #titulo {
-    color: blue;
-  }
-  
-  #tarefa {
-    width: 200px;
-    padding: 10px;
-    margin: 0 auto;
-    display: block;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  
-  #listaTarefas {
-    list-style-type: none;
-    padding: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #listaTarefas li {
-    margin-bottom: 10px;
-    border: 2px solid blue;
-    padding: 10px;
-    border-radius: 10px;
-    width: 200px;
-  }
-  
-  .addBtn {
-    background-color: blue;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-  }
-  
-  .clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  
-  .container {
-    text-align: center;
-  }
-  
-  .todo-input {
-    display: inline-block;
-  }
-  
-  .todo-list {
-    margin-top: 20px;
-  }
-  
-  .todo-item {
-    margin-bottom: 10px;
-  }
-  
+.custom-table {
+  width: 70%;
+  margin: 0 auto; /* Isso centralizará a tabela horizontalmente dentro  do container */
+  border: 1px solid #dee2e6; /* Adicione uma borda sólida à tabela */
+  border-collapse: collapse; /* Isso garante que as bordas das células sejam unidas */
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #dee2e6; /* Adicione borda às células da tabela */
+  padding: 8px; /* Ajuste o espaçamento interno das células conforme necessário */
+  width: 25%; /* Defina uma largura fixa para cada célula */
+}
+
+.table-blue {
+  background-color: #007bff; /* Define a cor de fundo para azul */
+  color: white; /* Define a cor do texto para branco */
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #007bff; /* Cor do texto do título em azul */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave para o texto */
+}
+
+.footer {
+  background-color: #f0f0f0;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #007bff;
+  text-decoration: none;
+}
