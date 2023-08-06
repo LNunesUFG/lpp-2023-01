@@ -12,12 +12,24 @@
     <h1 class="text-center mt-3">To-do List</h1>
     <div class="container mt-5 d-flex justify-content-center">
         <form class="text-center">
-            <div class="mb-3">
+            <div class="input-group mb-3">
                 <input class="form-control" id="inputTarefa" type="text" placeholder="Adicione uma tarefa..." data-sb-validations="" />
-            </div>
-            <div class="d-grid justify-content-center">
                 <span class="btn btn-primary btn-lg" id="submitButton" onclick="novoElemento()">Adicionar</span>
             </div>
+
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" id="inputBusca" placeholder="Digite o ID da tarefa">
+                <button type="button" class="btn btn-primary" onclick="buscarTarefaPorId()">Buscar</button>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="ordenar" id="radioConcluidas" onclick="ordenarConcluidas()">
+                <label class="form-check-label" for="radioConcluidas">Ordenar Concluídas</label>
+              </div>
+              <div class="form-check form-check-inline mt-2">
+                <input class="form-check-input" type="radio" name="ordenar" id="radioPendentes" onclick="ordenarPendentes()">
+                <label class="form-check-label" for="radioPendentes">Ordenar Pendentes</label>
+              </div>
         </form>
     </div>
 
@@ -39,7 +51,7 @@
 
     <footer class="footer">
         <div class="container text-center">
-            <p>© To do List - Linguagens e Paradigmas de Programação</p>
+            <p>© To-do List | LPP - UFG</p>
             <p>Desenvolvido por 
                 <a href="https://github.com/lnunesufg" target="_blank">Lucas Gabriel </a>
                 |

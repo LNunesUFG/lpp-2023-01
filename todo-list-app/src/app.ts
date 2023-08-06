@@ -12,15 +12,31 @@ class Tarefa {
 }
 
 class TodoList {
-  private tarefas: Array<Tarefa>;
+  public tarefas: Array<Tarefa>;
 
   constructor() {
     this.tarefas = [];
   }
 
+
   criarTarefa(id: number, descricao: string) {
     let tarefa: Tarefa = new Tarefa(id, descricao, false);
     this.tarefas.push(tarefa);
+  }
+
+  atualizarTarefa(id: number, descricao: string) {
+    const tarefa: Tarefa = todoList.buscarTarefa(id);
+    if (tarefa) {
+      tarefa.descricao = descricao;
+
+      todoList.removerTarefa(tarefa.id);
+      todoList.criarTarefa(tarefa.id, tarefa.descricao);
+      todoList.ordernarTarefa();
+
+      renderizarTarefas();
+      tarefaEditandoId = null; 
+    } else 
+      alert("Tarefa não encontrada.");
   }
 
   buscarTarefa(id: number): Tarefa {
@@ -69,7 +85,24 @@ class TodoList {
     this.tarefas.sort();
   }
 
-  // Filtrar tarefas com base no estado de conclusão (status/instatus)
+  ordenarTarefasConcluidas() {
+    this.tarefas.sort((a, b) => {
+      if (a.status === b.status) {
+        return a.id - b.id; 
+      }
+      return a.status ? -1 : 1;
+    });
+  }
+
+  ordenarTarefasPendentes() {
+    this.tarefas.sort((a, b) => {
+      if (a.status === b.status) {
+        return a.id - b.id;
+      }
+      return a.status ? 1 : -1;
+    });
+  }
+
   filtrarTarefasPorEstado(status: boolean): Array<Tarefa> {
     return this.tarefas.filter((tarefa) => tarefa.status === status);
   }
@@ -93,23 +126,39 @@ class TodoList {
 }
 
 let todoList = new TodoList();
+let tarefaEditandoId: number | null = null;
+let ordenamentoAtual = "";
 
 function novoElemento() {
   const inputElement: HTMLInputElement = document.getElementById("inputTarefa") as HTMLInputElement;
   const inputValor: string = inputElement.value.trim();
 
-  if (inputValor === "") {
-    alert("Insira uma tarefa para adicionar!");
-    return;
+  if (tarefaEditandoId !== null) {
+    todoList.atualizarTarefa(tarefaEditandoId, inputValor);
+    tarefaEditandoId = null; 
+  } else {
+    if (inputValor === "") {
+      alert("Insira uma tarefa para adicionar!");
+      return;
+    }
+
+    const id = todoList.criarNovoId();
+    todoList.criarTarefa(id, inputValor);
+    renderizarTarefas();
   }
-
-  const id = todoList.criarNovoId();
-  todoList.criarTarefa(id, inputValor);
-
-  imprimirTarefa(todoList.buscarTarefa(id));
 
   inputElement.value = "";
 } 
+
+function preencherInputComDescricaoAtual() {
+  const tarefaEditando: Tarefa | null = tarefaEditandoId ? todoList.buscarTarefa(tarefaEditandoId) : null;
+  const inputElement: HTMLInputElement = document.getElementById("inputTarefa") as HTMLInputElement;
+
+  if (tarefaEditando && inputElement) {
+    inputElement.value = tarefaEditando.descricao;
+    console.log('a')
+  }
+}
 
 function imprimirTarefa(tarefa: Tarefa) {
   const tableBody = document.getElementById("taskTableBody") as HTMLTableSectionElement;
@@ -120,6 +169,12 @@ function imprimirTarefa(tarefa: Tarefa) {
   const cellStatus = newRow.insertCell(2);
   const cellActions = newRow.insertCell(3);
 
+  const radioConcluidas = document.getElementById("radioConcluidas") as HTMLInputElement;
+  const radioPendentes = document.getElementById("radioPendentes") as HTMLInputElement;
+
+  radioConcluidas.checked = ordenamentoAtual === "concluidas";
+  radioPendentes.checked = ordenamentoAtual === "pendentes";
+
   cellId.textContent = tarefa.id.toString();
   cellDescription.textContent = tarefa.descricao;
   cellStatus.textContent = tarefa.Status;
@@ -128,7 +183,8 @@ function imprimirTarefa(tarefa: Tarefa) {
   deleteButton.textContent = "Excluir";
   deleteButton.className = "btn btn-danger";
   deleteButton.addEventListener("click", function () {
-    newRow.remove();
+    todoList.removerTarefa(tarefa.id);
+    renderizarTarefas();
   });
 
   const editButton = document.createElement("button");
@@ -136,11 +192,63 @@ function imprimirTarefa(tarefa: Tarefa) {
   editButton.className = "btn btn-warning ms-1";
 
   editButton.addEventListener("click", function () {
-    // Implemente aqui a lógica para editar a tarefa.
-    // Por exemplo, você pode abrir um modal para editar os detalhes da tarefa.
-    alert("Editar tarefa com ID: " + tarefa.id);
+      tarefaEditandoId = tarefa.id;
+      preencherInputComDescricaoAtual();
+  });
+
+  const completeButton = document.createElement("button");
+  completeButton.textContent = "Finalizar tarefa";
+  completeButton.className = "btn btn-success ms-1";
+  completeButton.addEventListener("click", function () {
+    if (tarefa.status === false) {
+      tarefa.status = true;
+      renderizarTarefas();
+    }
   });
 
   cellActions.appendChild(deleteButton);
   cellActions.appendChild(editButton);
+  cellActions.appendChild(completeButton);
+}
+
+function renderizarTarefas() {
+  const tableBody = document.getElementById("taskTableBody") as HTMLTableSectionElement;
+  tableBody.innerHTML = ""; 
+
+  todoList.tarefas.forEach((
+    tarefa: Tarefa) => {
+      imprimirTarefa(tarefa);
+  })
+}
+
+function ordenarConcluidas() {
+  todoList.ordenarTarefasConcluidas();
+  ordenamentoAtual = "concluidas";
+  renderizarTarefas();
+}
+
+function ordenarPendentes() {
+  todoList.ordenarTarefasPendentes();
+  ordenamentoAtual = "pendentes";
+  renderizarTarefas();
+}
+
+function buscarTarefaPorId() {
+  const inputBusca: HTMLInputElement = document.getElementById("inputBusca") as HTMLInputElement;
+  const idTarefa: number = parseInt(inputBusca.value);
+
+  if (!idTarefa) {
+    alert("Digite o código da tarefa.");
+    return;
+  } 
+
+  const tarefaEncontrada: Tarefa = todoList.buscarTarefa(idTarefa);
+
+  if (tarefaEncontrada) {
+    const tableBody = document.getElementById("taskTableBody") as HTMLTableSectionElement;
+    tableBody.innerHTML = "";
+    imprimirTarefa(tarefaEncontrada);
+  } else {
+    alert("Tarefa não encontrada.");
+  }
 }
